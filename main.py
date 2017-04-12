@@ -77,12 +77,14 @@ def menu():
         print(err)
 
 #Create freeling files
-#freelingFiles.Freeling()
+freelingFiles.Freeling()
 #Convert freeling files to XML
-#xmlFiles.convertXML()
+xmlFiles.convertXML()
 
 #Display menu
 freq = getFreqList(menu())
+
+os.chdir(home)
 
 print('palabra\tFrecuencia')
 for k,v in freq.items():
