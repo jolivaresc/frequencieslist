@@ -24,17 +24,20 @@ from analyzer import Analyzer
 import xmlFiles
 
 home = os.getcwd()
-src = '/folder/'
-Freeling = home+'/Freeling/'
-Analyzer.Run()
-
-if not os.path.exists(Freeling):
-    try:
-        MoveTo.Supermakedirs(Freeling)
-        MoveTo.Folder(home,src,Freeling,'csv')
-    except OSError as exception:
-        if exception.errno != errno.EEXIST:
-            raise
+def Freeling():
+    src = '/folder/'
+    Freeling = home+'/Freeling/'
+    Analyzer.Run()
+    
+    if not os.path.exists(Freeling):
+        try:
+            MoveTo.Supermakedirs(Freeling)
+            MoveTo.Folder(home,src,Freeling,'csv')
+        except OSError as exception:
+            if exception.errno != errno.EEXIST:
+                raise
 
 os.chdir(home)
+Freeling()
 xmlFiles.convertXML()
+
