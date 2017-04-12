@@ -18,31 +18,78 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-import os, csv
+import os, csv,freelingFiles,xmlFiles
 from collections import Counter
 
 home = os.getcwd()
-Freeling = home + '/Freeling/'
 
-os.chdir(Freeling)
+def getFreqList(options):
+    Freeling = home + '/Freeling/'
+    #Including stopword
+    if options['stopword']:
+        stopwords = [line.strip() for line in open('stopword.txt')]
+            
+    os.chdir(Freeling)
+    
+    folderFreeling = os.listdir(Freeling)
+    
+    frequencies = []
+    
+    for file in folderFreeling:
+        with open(file) as csvFile:
+            doc = csv.reader(csvFile,delimiter = ' ')
+            for row in doc:
+                if len(row):
+                    if options['opt'] == 3:
+                        #tags
+                        frequencies.append(row[2][0])
+                    elif options['opt'] == 2:
+                        #Lemas
+                        frequencies.append(row[1])
+                    elif options['opt'] == 1:
+                        if options['stopword']:
+                            if row[0] not in stopwords:
+                                frequencies.append(row[0])
+                        else:
+                            frequencies.append(row[0])
+   
+    return dict(Counter(frequencies))
 
-folderFreeling = os.listdir(Freeling)
 
-words = []
-lemmas = []
-tags = []
 
-for file in folderFreeling:
-    with open(file) as csvFile:
-        doc = csv.reader(csvFile,delimiter = ' ')
-        for row in doc:
-            if len(row):
-                words.append(row[0])
-                lemmas.append(row[1])
-                tags.append(row[2][0])
-                
-words_D = dict(Counter(words))
-lemmas_D = dict(Counter(lemmas))
-tags_D = dict(Counter(tags))
+def menu():
+    try:
+        option = int(input('Obtener lista de frecuencias de:\n1) Palabras\n2) Lemas\n3) Etiquetas\n'))
+        if option > 0 and option < 4:
+            if option == 1:
+                sw = input('Incluir lista de paro [y/n]\n')
+                if sw is 'y':
+                    return {'opt':option,'stopword':True}
+                else:
+                    return {'opt':option,'stopword':False}
+            else:
+                return {'opt':option,'stopword':False}
+              
+            
+        else:
+            print('Opción no válida.')
+    except ValueError as err:
+        print(err)
 
-os.chdir(home)
+#Create freeling files
+#freelingFiles.Freeling()
+#Convert freeling files to XML
+#xmlFiles.convertXML()
+
+#Display menu
+freq = getFreqList(menu())
+
+print('palabra\tFrecuencia')
+for k,v in freq.items():
+    print(k,v)
+
+
+
+
+
+

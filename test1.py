@@ -3,7 +3,7 @@
 """
     Copyright (C)  @author: jose 
     FI UNAM
-    Created on Mon Apr 10 15:53:12 2017
+    Created on Wed Apr 12 13:42:06 2017
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,26 +18,3 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-import os,errno
-from moveto import MoveTo
-from analyzer import Analyzer
-#import xmlFiles
-
-home = os.getcwd()
-def Freeling():
-    src = '/folder/'
-    Freeling = home+'/Freeling/'
-    Analyzer.Run()
-    
-    if not os.path.exists(Freeling):
-        try:
-            MoveTo.Supermakedirs(Freeling)
-            MoveTo.Folder(home,src,Freeling,'csv')
-        except OSError as exception:
-            if exception.errno != errno.EEXIST:
-                raise
-
-os.chdir(home)
-#Freeling()
-#xmlFiles.convertXML()
-
